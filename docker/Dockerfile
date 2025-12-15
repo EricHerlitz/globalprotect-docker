@@ -66,6 +66,10 @@ COPY --from=builder /gpagent/install/ /usr
 # because all keyrings require D-Bus, which we don't have in container.
 ENV GPAGENT_ALLOW_PLAIN_PASSWORD=1
 
+# Disable Chromium sandbox for QtWebEngine since we run as root in the container.
+# This is required for SAML authentication to work.
+ENV QTWEBENGINE_DISABLE_SANDBOX=1
+
 RUN apt-get -y --no-install-recommends install \
      git
 
