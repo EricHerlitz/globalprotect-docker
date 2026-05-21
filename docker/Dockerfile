@@ -88,10 +88,11 @@ RUN apt-get -y --no-install-recommends install \
      rm -rf /var/lib/apt/lists/*
 
 COPY ./docker/microsocks.sh /
-RUN chmod +x /microsocks.sh
+COPY ./docker/docker-egress-route.sh /
+RUN chmod +x /microsocks.sh /docker-egress-route.sh
 
 # Start supervisord
-EXPOSE 8080
+EXPOSE 1080
 EXPOSE 8083
 CMD ["/usr/bin/supervisord", "-c", "/etc/supervisord.conf"]
 
