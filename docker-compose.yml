@@ -12,9 +12,11 @@ services:
       - /dev/net/tun
     cap_add:
       - NET_ADMIN
+    environment:
+      DOCKER_STATIC_ROUTES: 10.11.0.0/16 via 172.19.0.1 dev eth0
     ports:
       - 0.0.0.0:8083:8083
-      - 0.0.0.0:8080:1080
+      - 0.0.0.0:1080:1080
     networks:
       - globalprotect
  

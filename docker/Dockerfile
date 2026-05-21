@@ -84,6 +84,8 @@ WORKDIR /root
 RUN apt-get -y --no-install-recommends install \
      microsocks \
      iproute2 && \
+     iputils-ping && \
+     net-tools && \
      apt-get clean && \
      rm -rf /var/lib/apt/lists/*
 
