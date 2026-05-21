@@ -12,7 +12,6 @@ set -u
 IFACE="${DOCKER_EGRESS_IFACE:-eth0}"
 TABLE="${DOCKER_EGRESS_TABLE:-100}"
 PRIORITY="${DOCKER_EGRESS_PRIORITY:-100}"
-STATIC_ROUTES="${DOCKER_STATIC_ROUTES:-}"
 
 log() {
 	echo "docker-egress-route: $*"
@@ -78,39 +77,9 @@ ensure_policy_route() {
 	log "ensured replies from $ip_addr use $IFACE via $gateway in table $TABLE"
 }
 
-ensure_static_routes() {
-	local route
-
-	if [ -z "$STATIC_ROUTES" ]; then
-		return 0
-	fi
-
-	# Configure one or more plain ip-route fragments separated by semicolons.
-	# Example:
-	#   DOCKER_STATIC_ROUTES="10.11.0.0/16 via 172.19.0.1 dev eth0;192.168.1.0/24 via 172.19.0.1 dev eth0"
-	IFS=';' read -ra routes <<< "$STATIC_ROUTES"
-	for route in "${routes[@]}"; do
-		# Trim leading/trailing whitespace.
-		route="$(sed -e 's/^[[:space:]]*//' -e 's/[[:space:]]*$//' <<< "$route")"
-		if [ -z "$route" ]; then
-			continue
-		fi
-
-		# Intentionally allow word splitting here because the value is an ip route
-		# argument fragment, not a single shell word.
-		# shellcheck disable=SC2086
-		if ip route replace $route; then
-			log "ensured static route: $route"
-		else
-			log "failed to configure static route: $route"
-		fi
-	done
-}
-
 wait_for_eth0
 
 while true; do
 	ensure_policy_route || true
-	ensure_static_routes || true
 	sleep 10
 done
