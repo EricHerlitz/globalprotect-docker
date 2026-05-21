@@ -83,7 +83,7 @@ WORKDIR /root
 
 RUN apt-get -y --no-install-recommends install \
      microsocks \
-     iproute2 \
+     iproute2 && \
      apt-get clean && \
      rm -rf /var/lib/apt/lists/*
 
