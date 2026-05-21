@@ -13,8 +13,8 @@ services:
     cap_add:
       - NET_ADMIN
     ports:
-      - 127.0.0.1:8083:8083
-      - 127.0.0.1:8080:1080
+      - 0.0.0.0:8083:8083
+      - 0.0.0.0:8080:1080
     networks:
       - globalprotect
  

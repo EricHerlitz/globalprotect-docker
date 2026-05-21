@@ -82,13 +82,13 @@ RUN git clone https://github.com/kanaka/websockify
 WORKDIR /root
 
 RUN apt-get -y --no-install-recommends install \
-     dante-server \
-     net-tools && \
+     microsocks \
+     iproute2 \
      apt-get clean && \
      rm -rf /var/lib/apt/lists/*
 
-COPY ./docker/danted.conf.in /etc/
-COPY ./docker/danted.sh /
+COPY ./docker/microsocks.sh /
+RUN chmod +x /microsocks.sh
 
 # Start supervisord
 EXPOSE 8080
